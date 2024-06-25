@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Clean-arch-by-Kovalenko</string>
+    <string name="get_data">Get Data</string>
+    <string name="send_data">Send Data</string>
+    <string name="no_data">No data</string>
+    <string name="put_data_here">Put data here</string>
+</resources>
