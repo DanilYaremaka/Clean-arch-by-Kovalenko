@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Clean-arch-by-Kovalenko"
 include(":app")
- 
+include(":data")
+include(":domain")

@@ -9,6 +9,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.clean_arch_by_kovalenko.R
 import com.example.clean_arch_by_kovalenko.data.repository.UserRepositoryImpl
+import com.example.clean_arch_by_kovalenko.data.storage.sharedPrefs.SharedPrefUserStorage
 import com.example.clean_arch_by_kovalenko.domain.entity.SaveUserNameParam
 import com.example.clean_arch_by_kovalenko.domain.entity.UserName
 import com.example.clean_arch_by_kovalenko.domain.usecase.GetUserNameUseCase
@@ -16,9 +17,27 @@ import com.example.clean_arch_by_kovalenko.domain.usecase.SaveUserNameUseCase
 
 class MainActivity : AppCompatActivity() {
 
-    private val userRepository by lazy(LazyThreadSafetyMode.NONE) { UserRepositoryImpl(applicationContext) }
-    private val getUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) { GetUserNameUseCase(userRepository) }
-    private val saveUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) { SaveUserNameUseCase(userRepository) }
+    private val userStorage by lazy {
+        SharedPrefUserStorage(
+            applicationContext
+        )
+    }
+
+    private val userRepository by lazy(LazyThreadSafetyMode.NONE) {
+        UserRepositoryImpl(
+            userStorage
+        )
+    }
+    private val getUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
+        GetUserNameUseCase(
+            userRepository
+        )
+    }
+    private val saveUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
+        SaveUserNameUseCase(
+            userRepository
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +57,18 @@ class MainActivity : AppCompatActivity() {
 
         sendButton.setOnClickListener {
             val text = dataEditView.text.toString()
-            val result = saveUserNameUseCase(SaveUserNameParam(text))
+            val result = saveUserNameUseCase(
+                SaveUserNameParam(
+                    text
+                )
+            )
             dataTextView.text = "Save result = $result"
             dataEditView.text = ""
         }
 
         receiveButton.setOnClickListener {
-            val userName: UserName = getUserNameUseCase()
+            val userName: UserName =
+                getUserNameUseCase()
             dataTextView.text = "${userName.lastName} ${userName.firstName}"
         }
     }
