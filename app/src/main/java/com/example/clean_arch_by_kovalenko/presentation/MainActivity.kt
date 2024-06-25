@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.clean_arch_by_kovalenko.R
 import com.example.clean_arch_by_kovalenko.data.repository.UserRepositoryImpl
 import com.example.clean_arch_by_kovalenko.data.storage.sharedPrefs.SharedPrefUserStorage
@@ -17,27 +18,7 @@ import com.example.clean_arch_by_kovalenko.domain.usecase.SaveUserNameUseCase
 
 class MainActivity : AppCompatActivity() {
 
-    private val userStorage by lazy {
-        SharedPrefUserStorage(
-            applicationContext
-        )
-    }
-
-    private val userRepository by lazy(LazyThreadSafetyMode.NONE) {
-        UserRepositoryImpl(
-            userStorage
-        )
-    }
-    private val getUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        GetUserNameUseCase(
-            userRepository
-        )
-    }
-    private val saveUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        SaveUserNameUseCase(
-            userRepository
-        )
-    }
+    private lateinit var vm: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,26 +31,27 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        vm = ViewModelProvider(
+            this,
+            MainViewModelFactory(this)
+        )[MainViewModel::class.java]
+
         val dataTextView = findViewById<TextView>(R.id.dataTextView)
         val dataEditView = findViewById<TextView>(R.id.dataEditText)
         val sendButton = findViewById<Button>(R.id.sendButton)
         val receiveButton = findViewById<Button>(R.id.receiveButton)
 
+        vm.resultLive.observe(this) {
+            dataTextView.text = it
+        }
+
         sendButton.setOnClickListener {
             val text = dataEditView.text.toString()
-            val result = saveUserNameUseCase(
-                SaveUserNameParam(
-                    text
-                )
-            )
-            dataTextView.text = "Save result = $result"
-            dataEditView.text = ""
+            vm.save(text)
         }
 
         receiveButton.setOnClickListener {
-            val userName: UserName =
-                getUserNameUseCase()
-            dataTextView.text = "${userName.lastName} ${userName.firstName}"
+            vm.load()
         }
     }
 }

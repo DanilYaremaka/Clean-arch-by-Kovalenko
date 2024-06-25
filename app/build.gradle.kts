@@ -45,6 +45,13 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
+    val lifecycle_version = "2.8.2"
+
+    // ViewModel
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    // LiveData
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
