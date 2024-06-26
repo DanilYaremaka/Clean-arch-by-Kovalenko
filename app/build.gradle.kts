@@ -45,12 +45,15 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
-    val lifecycle_version = "2.8.2"
-
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    // Koin for Android
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    testImplementation(libs.koin.test)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

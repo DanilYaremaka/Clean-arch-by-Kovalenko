@@ -7,18 +7,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.clean_arch_by_kovalenko.R
-import com.example.clean_arch_by_kovalenko.data.repository.UserRepositoryImpl
-import com.example.clean_arch_by_kovalenko.data.storage.sharedPrefs.SharedPrefUserStorage
-import com.example.clean_arch_by_kovalenko.domain.entity.SaveUserNameParam
-import com.example.clean_arch_by_kovalenko.domain.entity.UserName
-import com.example.clean_arch_by_kovalenko.domain.usecase.GetUserNameUseCase
-import com.example.clean_arch_by_kovalenko.domain.usecase.SaveUserNameUseCase
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var vm: MainViewModel
+    private val vm by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +24,6 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        vm = ViewModelProvider(
-            this,
-            MainViewModelFactory(this)
-        )[MainViewModel::class.java]
 
         val dataTextView = findViewById<TextView>(R.id.dataTextView)
         val dataEditView = findViewById<TextView>(R.id.dataEditText)
