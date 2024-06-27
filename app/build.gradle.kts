@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-kapt")
 }
 
 android {
@@ -45,12 +46,16 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
 
-    val lifecycle_version = "2.8.2"
 
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     // LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    //dagger
+    implementation(libs.dagger.v2511)
+    kapt(libs.dagger.compiler.v2511)
+    implementation(libs.javax.inject)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
